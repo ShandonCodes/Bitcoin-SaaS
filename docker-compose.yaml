@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  bitcoin:
+    build:
+      context: ./bitcoin
+      dockerfile: Dockerfile
+    ports:
+      - "19001:19001"
+
+  explorer:
+    build: 
+      context: ./explorer
+      dockerfile: Dockerfile
+    environment:
+      BTCEXP_HOST: 0.0.0.0
+      BTCEXP_BITCOIND_HOST: bitcoin
+      BTCEXP_BITCOIND_PORT: 19001
+      BTCEXP_BITCOIND_USER: admin1
+      BTCEXP_BITCOIND_PASS: 123
+      BTCEXP_ADDRESS_API: electrumx
+      BTCEXP_ELECTRUM_SERVERS: tcp://electrum:50001
+    ports:
+      - "3002:3002"
+
+  electrum:
+    image: lukechilds/electrumx
+    environment:
+      DAEMON_URL: http://admin1:123@bitcoin:19001
+      COIN: Bitcoin
+      NET: regtest
+    ports:
+      - "50001:50001"
+
+  api:
+    build:
+      context: "./server"
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    restart: 'on-failure'
+

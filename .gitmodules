@@ -1,0 +1,6 @@
+[submodule "bitcoin"]
+	path = bitcoin
+	url = git@github.com:ShandonCodes/bitcoin-testnet-box.git
+[submodule "explorer"]
+	path = explorer
+	url = git@github.com:janoside/btc-rpc-explorer.git
